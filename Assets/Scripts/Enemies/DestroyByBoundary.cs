@@ -8,21 +8,23 @@ namespace Enemies
     public class DestroyByBoundary : MonoBehaviour
     {
         private AsteroidPool _asteroidPool;
+        private BulletPool _bulletPool;
         
         [Inject]
-        public void Construct(AsteroidPool asteroidPool)
+        public void Construct(AsteroidPool asteroidPool, BulletPool bulletPool)
         {
             _asteroidPool = asteroidPool;
+            _bulletPool = bulletPool;
         }
         private void OnTriggerExit(Collider other)
         {
-            //Destroy(other.gameObject);
-            if (other.TryGetComponent<Asteroid>(out var asteroid))
+            if (other.TryGetComponent<IDespawnable>(out var despawnable))
             {
-                if (asteroid.gameObject.activeSelf)
-                {
-                    _asteroidPool.Release(asteroid);
-                }
+               despawnable.Despawn();
+            }
+            else
+            {
+                Destroy(other.gameObject);
             }
         }
     }

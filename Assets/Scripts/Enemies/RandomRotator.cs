@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Enemies
 {
@@ -7,9 +7,19 @@ namespace Enemies
         [SerializeField] private float _minTumble;
         [SerializeField] private float _maxTumble;
 
-        private void Start()
+        private Rigidbody _rb;
+
+        private void Awake()
         {
-            GetComponent<Rigidbody>().angularVelocity = Random.insideUnitSphere * Random.Range(_minTumble, _maxTumble);
+            _rb = GetComponent<Rigidbody>();
+        }
+
+        private void OnEnable()
+        {
+            if (_rb == null)
+                _rb = GetComponent<Rigidbody>();
+
+            _rb.angularVelocity = Random.insideUnitSphere * Random.Range(_minTumble, _maxTumble);
         }
     }
 }

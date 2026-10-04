@@ -1,29 +1,28 @@
-using System;
 using Pool;
 using UnityEngine;
 using IPoolable = Pool.IPoolable;
-using Random = UnityEngine.Random;
 
-namespace Enemies
+namespace Combat
 {
-    public class Asteroid : MonoBehaviour, IPoolable, IDespawnable
+    public class Bullet : MonoBehaviour, IPoolable, IDespawnable
     {
-        public AsteroidPool OwnerPool { get; set; }
-
+        [SerializeField] private float _speed = 20f;
+        
+        public BulletPool OwnerPool { get; set; }
         private Rigidbody _rb;
 
         private void Awake()
         {
             _rb = GetComponent<Rigidbody>();
         }
+
+        public void Launch()
+        {
+            _rb.linearVelocity = transform.forward * _speed;
+        }
         
         public void OnSpawned()
         {
-            if (_rb != null)
-            {
-                _rb.linearVelocity = Vector3.zero;
-                _rb.angularVelocity = Vector3.zero;
-            }
         }
 
         public void OnDespawned()
@@ -33,7 +32,7 @@ namespace Enemies
                 _rb.linearVelocity = Vector3.zero;
                 _rb.angularVelocity = Vector3.zero;
             }
-            
+            gameObject.SetActive(false);
         }
 
         public void Despawn()

@@ -1,41 +1,46 @@
+using Enemies;
 using Pool;
 using UnityEngine;
+using Zenject;
 
-public class AsteroidSpawner : MonoBehaviour
+namespace Spawners
 {
-    [SerializeField] private AsteroidPool _asteroidPool;
-    [SerializeField] private Transform _spawnPoint;
-
-    [SerializeField] private float _spawnWidth;
-    [SerializeField] private float _spawnRate;
-    
-    private float timer = 0f;
-    private void Update()
+    public class AsteroidSpawner : MonoBehaviour
     {
-        timer += Time.deltaTime;
+        private AsteroidPool _asteroidPool;
+        [SerializeField] private Transform _spawnPoint;
 
-        if (timer >= _spawnRate)
+        [SerializeField] private float _spawnWidth;
+        [SerializeField] private float _spawnRate;
+        
+        private float timer = 0f;
+
+        [Inject]
+        public void Construct(AsteroidPool asteroidPool)
         {
-            Spawn();
+            _asteroidPool = asteroidPool;
+        }
+        
+        private void Update()
+        {
+            timer += Time.deltaTime;
+
+            if (timer >= _spawnRate)
+            {
+                Spawn();
+                
+                timer = 0f; 
+            }
+        }
+
+        private void Spawn()
+        {
+
+            Vector3 position =
+                _spawnPoint.position +
+                _spawnPoint.right * Random.Range(-_spawnWidth / 2f, _spawnWidth / 2f);
             
-            timer = 0f; 
+            Asteroid asteroid = _asteroidPool.Get(position,_spawnPoint.rotation);
         }
     }
-
-    private void Spawn()
-    {
-        Asteroid asteroid = _asteroidPool.Get();
-        
-        Vector3 position =
-            _spawnPoint.position +
-            _spawnPoint.right * Random.Range(-_spawnWidth / 2f, _spawnWidth / 2f);
-
-        asteroid.transform.SetPositionAndRotation(
-            position,
-            _spawnPoint.rotation);
-
-        asteroid.Launch();
-    }
-
-
 }

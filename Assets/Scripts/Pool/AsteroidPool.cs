@@ -1,6 +1,5 @@
-﻿
+using Enemies;
 using UnityEngine;
-
 
 namespace Pool
 {
@@ -12,6 +11,7 @@ namespace Pool
         [SerializeField] private Transform _container;
 
         private ObjectPool<Asteroid> _pool;
+        public Asteroid Get() => Get(transform.position, transform.rotation);
 
         private void Awake()
         {
@@ -26,19 +26,25 @@ namespace Pool
 
         }
 
-        public Asteroid Get()
+        public Asteroid Get(Vector3 position, Quaternion rotation)
         {
             Asteroid asteroid = _pool.Get();
+            asteroid.transform.SetPositionAndRotation(position, rotation);
             asteroid.gameObject.SetActive(true);
             return asteroid;
         }
-        
-        public void Release(Asteroid asteroid) => _pool.Release(asteroid);
+
+        public void Release(Asteroid asteroid)
+        {
+            asteroid.gameObject.SetActive(false);
+            _pool.Release(asteroid);
+        } 
 
         private Asteroid CreateAsteroid()
         {
             Asteroid asteroid = Instantiate(_asteroidPrefab, _container);
             asteroid.OwnerPool = this;
+            asteroid.gameObject.SetActive(false);
             return asteroid;
         }
 
