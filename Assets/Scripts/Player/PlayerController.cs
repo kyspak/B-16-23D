@@ -1,4 +1,5 @@
 using System;
+using Core;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,39 +11,67 @@ namespace Player
         public float xMin, xMax, zMin, zMax;
     }
 
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviour, IWeapon
     {
         [SerializeField] private float _speed;
         [SerializeField] private float _tilt;
         [SerializeField] private Boundary _boundary;
         
+        [SerializeField] private GameObject _shotPrefab;
+        [SerializeField] private Transform _shotSpawn;
         [SerializeField] private float _fireRate;
-
-        private float _nextFire;
+        
         
         private Rigidbody _rb;
         private PlayerInput _playerInput;
+        private AudioSource _shotAudio;
         
         private InputAction _moveAction;
         private InputAction _shotAction;
+
+
+        public GameObject shotPrefab
+        {
+            get => _shotPrefab;
+            set => _shotPrefab = value;
+        }
+
+        public Transform shotSpawn
+        {
+            get => _shotSpawn;
+            set => _shotSpawn = value;
+        }
+
+        public float fireRate
+        {
+            get => _fireRate;
+            set => _fireRate = value;
+        }
+
+        public event Action<Transform, GameObject> OnFire;
+
+        //public event Action<Transform, GameObject> OnFire;
+
 
         private void Awake()
         {
             _rb = GetComponent<Rigidbody>();
             _playerInput = GetComponent<PlayerInput>();
+            _shotAudio = GetComponent<AudioSource>();
             
+            
+            _shotAction = _playerInput.actions["Attack"];
             _moveAction = _playerInput.actions["Move"];
         }
 
-        private void Update()
+        private void OnEnable()
         {
-            // if (_shotAction.triggered)
-            // {
-            //     _nextFire = Time.time + _fireRate;
-            //     Instantiate(_shotPrefab, _shotSpawn.position, _shotSpawn.rotation);
-            //
-            //     _shotAudio.Play();
-            // }
+            _shotAction.started += _ => OnFireHandler();
+        }
+
+        private void OnDisable()
+        {
+            _shotAction.started -= _ => OnFireHandler();
         }
 
         private void FixedUpdate()
@@ -60,6 +89,12 @@ namespace Player
 
             _rb.rotation = Quaternion.Euler(0.0f, 0.0f, _rb.linearVelocity.x * -_tilt);
             
+        }
+
+        private void OnFireHandler()
+        {
+            OnFire?.Invoke( _shotSpawn, _shotPrefab);
+            _shotAudio.Play();
         }
     }
 }

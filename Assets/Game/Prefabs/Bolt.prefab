@@ -102,6 +102,7 @@ GameObject:
   - component: {fileID: 8383730872984800750}
   - component: {fileID: 5517765593871364453}
   - component: {fileID: -7487507826262907257}
+  - component: {fileID: 9090921828430364712}
   m_Layer: 0
   m_Name: Bolt
   m_TagString: Untagged
@@ -182,9 +183,23 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7264084877096311631}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3fc0dfc46151b1f48a041daaf65792ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bullet
   _speed: 20
+--- !u!114 &9090921828430364712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7264084877096311631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ab9263e0d974fec9e6f09235f9b1c7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemies.Mover
+  _minSpeed: 20
+  _maxSpeed: 20

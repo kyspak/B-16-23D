@@ -155,8 +155,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ab9263e0d974fec9e6f09235f9b1c7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemies.Mover
-  _minSpeed: 5
-  _maxSpeed: 20
+  _minSpeed: 1
+  _maxSpeed: 3
 --- !u!1001 &1932212080397195718
 PrefabInstance:
   m_ObjectHideFlags: 0

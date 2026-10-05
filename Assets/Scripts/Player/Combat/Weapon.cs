@@ -1,3 +1,5 @@
+
+using System;
 using Pool;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -16,7 +18,7 @@ namespace Combat
         
         private PlayerInput _playerInput;
         private InputAction _shotAction;
-
+        
         [Inject]
         public void Construct(BulletPool bulletPool)
         {
@@ -33,11 +35,12 @@ namespace Combat
 
         private void Update()
         {
-            if (_shotAction.triggered && Time.time >= _nextFire)
-            {
-                    _nextFire = Time.time + _fireRate;
-                    Spawn();
-            }
+            // if (_shotAction.triggered && Time.time >= _nextFire)
+            // {
+            //         
+            //         _nextFire = Time.time + _fireRate;
+            //         Spawn();
+            // }
         }
 
         private void Spawn()
